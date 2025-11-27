@@ -1,5 +1,8 @@
-# QuantumLeap
-## How to run the QuantumLeap framework?
+# EAGER
+
+## Implementation of QuantumLeap framework for testing Ensemble learning for optimizing Adaptable GEsture Recognition.
+
+## How to run the EAGER framework?
 1. Install the [Leap Motion SDK (v3.2.1)](https://www.ultraleap.com/downloads/leap-controller/).
 2. Install [Node.js](https://nodejs.org/en/download/) (tested on Node v22).
 3. Install the dependencies.
@@ -10,11 +13,11 @@
 
         npm start
 
-5. Access the QuantumLeap UI by accessing [http://localhost:5173/overview](http://localhost:5173/overview) in your browser (the port may be different if another process is was already using it before - the correct URL will be displayed in the terminal).
+5. Access the EAGER UI by accessing [http://localhost:5173/overview](http://localhost:5173/overview) in your browser (the port may be different if another process is was already using it before - the correct URL will be displayed in the terminal).
 
 
 ## How to add gestural support to your application with QuantumLeap?
-### Configuring QuantumLeap
+### Configuring EAGER
 Use the QuantumLeap GUI to modify the settings of the framework. 
 
 ### Adding gestures to your application

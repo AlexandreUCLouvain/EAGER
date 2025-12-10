@@ -1,13 +1,8 @@
 {
-  "label": "Multiple Recognizers",
-  "name": "multi-recognizer",
+  "label": "Majority Voting",
+  "name": "majority-voting",
   "type": "recognizer-dynamic",
-  "params": [
-    { "name": "majority"},
-    { "name": "dirichlet"}
-  ],
-  "default" : "majority",
-  "description": "A module that allows the combination of multiple recognizers.",
+  "description": "A module that uses the majority voting technique.",
   "properties": {},
   "settings": [
     {
@@ -19,16 +14,6 @@
       "minModules": 1,
       "maxModules": null,
       "settings": [
-        {
-          "name": "weight",
-          "type": "FloatInput",
-          "label": "Weight",
-          "description": "The weight given to the recognizer. A lower weight means that the result of the recognizer is less significant",
-          "minValue": 0,
-          "maxValue": null,
-          "required": true,
-          "default": 1
-        },
         {
           "type": "GesturesSelector2",
           "label": "Training gestures",

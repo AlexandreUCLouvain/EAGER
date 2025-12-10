@@ -17,6 +17,7 @@
     "leapjs": "0.6.4",
     "mathjs": "^10.4.2",
     "ringbufferjs": "^2.0.0",
+    "seedrandom": "^3.0.5",
     "ws": "^7.5.3",
     "xml2js": "0.4.23"
   },

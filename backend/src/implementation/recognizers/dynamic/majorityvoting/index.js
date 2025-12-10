@@ -2,7 +2,7 @@ const AbstractDynamicRecognizer = require('../../../../framework/modules/recogni
 const { performance } = require('perf_hooks');
 
 class Recognizer extends AbstractDynamicRecognizer {
-	static name = "MultiRecognizer";
+	static name = "MajorityVoting";
 
   constructor(options, dataset) {
     super();
@@ -48,7 +48,7 @@ class Recognizer extends AbstractDynamicRecognizer {
 			let result = recognizer.recognize(sample);
 			if (result.name) {
 				voters += 1;
-				if (results.hasOwnProperty(result.name)) {
+				if (result.hasOwnProperty(result.name)) {
 					votes[result.name] = 1;
 				}
 				else {

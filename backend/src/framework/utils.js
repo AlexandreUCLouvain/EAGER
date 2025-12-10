@@ -1,3 +1,6 @@
+const seedrandom = require('seedrandom');
+const rng = seedrandom('my-seed');
+
 function parsePointsNames(selectedPoints) {
   let pointsNames = [];
   Object.keys(selectedPoints).forEach(sensorName => {
@@ -5,6 +8,7 @@ function parsePointsNames(selectedPoints) {
   });
   return pointsNames;
 }
+
 
 /**
  * Return a random number between min and max.

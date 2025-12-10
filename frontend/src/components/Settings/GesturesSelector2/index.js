@@ -47,28 +47,36 @@ class GesturesSelector2 extends React.Component {
 
     // Retrieve the available gestures
     let availableGestures = [];
-    const aggregateClasses = values.main.settings.datasets[datasetType].aggregateClasses;
-    if (aggregateClasses.length === 0) {
-      // If no aggregateClasses, retrieve dataset-loaders & datasets infos
-      const datasetLoaders = values.main.settings.datasets[datasetType].modules;
-      const datasets = templates.datasets[datasetType];
-      // Retrieve the datasets names and ids
-      let datasetsInfos = [];
-      datasetLoaders.forEach(datasetLoader => {
-        if (datasetLoader.additionalSettings.datasets.length > 0) {
-          datasetsInfos.push({ name: datasetLoader.additionalSettings.datasets[0], id: datasetLoader.additionalSettings.datasetId });
-        }
-      });
-      datasetsInfos.forEach(datasetInfo => {
-        if (datasetInfo.name in datasets) {
-          availableGestures.push(...datasets[datasetInfo.name].gestures.map((gesture) => datasetInfo.id ? `${gesture}_${datasetInfo.id}` : gesture));
-        }
-      });
-    } else {
-      // Else, use aggregateClasses
-      availableGestures = aggregateClasses.map((aggregateClass) => aggregateClass.name);
-    }
 
+    const datasetConfig = values.main?.settings?.datasets?.[datasetType];
+
+    // Check if dataset config exists and is properly structured
+    if (!datasetConfig || Array.isArray(datasetConfig) || !datasetConfig.aggregateClasses) {
+      console.warn('Dataset not properly configured yet. Using empty gestures list.');
+      // Dataset not configured - set empty gestures and continue rendering
+    } else {
+      const aggregateClasses = datasetConfig.aggregateClasses;
+      if (aggregateClasses.length === 0) {
+        // If no aggregateClasses, retrieve dataset-loaders & datasets infos
+        const datasetLoaders = datasetConfig.modules;
+        const datasets = templates.datasets[datasetType];
+        // Retrieve the datasets names and ids
+        let datasetsInfos = [];
+        datasetLoaders.forEach(datasetLoader => {
+          if (datasetLoader.additionalSettings.datasets.length > 0) {
+            datasetsInfos.push({ name: datasetLoader.additionalSettings.datasets[0], id: datasetLoader.additionalSettings.datasetId });
+          }
+        });
+        datasetsInfos.forEach(datasetInfo => {
+          if (datasetInfo.name in datasets) {
+            availableGestures.push(...datasets[datasetInfo.name].gestures.map((gesture) => datasetInfo.id ? `${gesture}_${datasetInfo.id}` : gesture));
+          }
+        });
+      } else {
+        // Else, use aggregateClasses
+        availableGestures = aggregateClasses.map((aggregateClass) => aggregateClass.name);
+      }
+    }
     // Handlers
     const handleOpen = () => {
       this.setState({

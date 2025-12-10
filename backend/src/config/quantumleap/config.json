@@ -21,6 +21,15 @@
             "additionalSettings": {
               "id": "lmc"
             }
+          },
+          {
+            "uuid": "6cb11542-500c-4bbd-ba16-42489db2f9c1",
+            "moduleName": "leap-sensor",
+            "moduleType": "sensors",
+            "moduleSettings": {},
+            "additionalSettings": {
+              "id": "sensor"
+            }
           }
         ],
         "framerate": 60

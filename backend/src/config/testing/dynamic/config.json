@@ -6,17 +6,134 @@
           "debug": false
         },
         "testingParams": {
-          "types": []
+          "types": [
+            {
+              "uuid": "ab920822-1989-4676-835f-303ca6a82cab",
+              "paramName": "tts",
+              "paramSettings": {
+                "r": 100,
+                "minT": 1,
+                "maxT": 3,
+                "modes": [
+                  {
+                    "uuid": "66ed9415-522a-499e-894c-24d8c5cf9e50",
+                    "paramName": "userDependent",
+                    "paramSettings": {},
+                    "additionalSettings": {}
+                  }
+                ]
+              },
+              "additionalSettings": {}
+            }
+          ]
         }
       },
       "datasets": {
         "dynamic": {
-          "procedure": []
+          "procedure": [
+            {
+              "uuid": "1c098daa-72f7-42b9-a68e-e46c610125b0",
+              "paramName": "singleDataset",
+              "paramSettings": {
+                "modules": [
+                  {
+                    "uuid": "fb39b12c-a72f-4da2-8231-9154de8603ad",
+                    "moduleName": "unified-loader",
+                    "moduleType": "datasets/dynamic",
+                    "moduleSettings": {},
+                    "additionalSettings": {
+                      "datasets": [
+                        "guinevere_unified"
+                      ],
+                      "users": "",
+                      "datasetId": ""
+                    }
+                  }
+                ],
+                "aggregateClasses": []
+              },
+              "additionalSettings": {}
+            }
+          ]
         }
       },
       "recognizers": {
         "dynamic": {
-          "modules": []
+          "modules": [
+            {
+              "uuid": "35773b97-2036-42e3-b69a-6b4f3f9170ad",
+              "moduleName": "majorityvoting",
+              "moduleType": "recognizers/dynamic",
+              "moduleSettings": {
+                "recognizers": [
+                  {
+                    "uuid": "03597255-e36b-4b37-961c-a57cff328f73",
+                    "moduleName": "p3dollar",
+                    "moduleType": "recognizers/dynamic",
+                    "moduleSettings": {
+                      "samplingPoints": 16,
+                      "points": {
+                        "default": [
+                          "rightPalmPosition",
+                          "rightThumbTipPosition",
+                          "rightMiddleTipPosition",
+                          "rightIndexTipPosition",
+                          "rightPinkyTipPosition"
+                        ]
+                      }
+                    },
+                    "additionalSettings": {
+                      "trainingGestures": []
+                    }
+                  },
+                  {
+                    "uuid": "99dd47e2-e029-452c-9db0-6d649d970a61",
+                    "moduleName": "p3dollarplus",
+                    "moduleType": "recognizers/dynamic",
+                    "moduleSettings": {
+                      "samplingPoints": 16,
+                      "points": {
+                        "default": [
+                          "rightPalmPosition",
+                          "rightThumbTipPosition",
+                          "rightMiddleTipPosition",
+                          "rightIndexTipPosition",
+                          "rightPinkyTipPosition"
+                        ]
+                      }
+                    },
+                    "additionalSettings": {
+                      "trainingGestures": []
+                    }
+                  },
+                  {
+                    "uuid": "484aed0b-96d7-468e-9ece-2b2baf24cdc3",
+                    "moduleName": "q3dollar",
+                    "moduleType": "recognizers/dynamic",
+                    "moduleSettings": {
+                      "samplingPoints": 16,
+                      "points": {
+                        "default": [
+                          "rightPalmPosition",
+                          "rightThumbTipPosition",
+                          "rightMiddleTipPosition",
+                          "rightIndexTipPosition",
+                          "rightPinkyTipPosition"
+                        ]
+                      }
+                    },
+                    "additionalSettings": {
+                      "trainingGestures": []
+                    }
+                  }
+                ],
+                "modules": []
+              },
+              "additionalSettings": {
+                "useCustomParams": false
+              }
+            }
+          ]
         }
       }
     }

@@ -1,0 +1,8 @@
+{
+  "label": "3DTCGS Dataset Loader",
+  "name": "3DTCGS-loader",
+  "type": "dataset/dynamic",
+  "description": "A loader for 3DTCGS QuantumLeap datasets.",
+  "properties": {},
+  "settings": []
+}

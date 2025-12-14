@@ -1,0 +1,8 @@
+{
+  "label": "SHREC19 Dataset Loader",
+  "name": "SHREC19-loader",
+  "type": "dataset/dynamic",
+  "description": "A loader for SHREC19 QuantumLeap datasets.",
+  "properties": {},
+  "settings": []
+}

@@ -31,6 +31,10 @@ class ModuleSelector extends React.Component {
     const modulesNames = Object.keys(modules).filter(name => 
       (modules[name].display === true || modules[name].display === undefined || modules[name].display === null)
     );
+    console.log('ModuleSelector - moduleType:',moduleType);
+    console.log('ModuleSelector - modules:',modules);
+    console.log('ModuleSelector - modulesNames:', modulesNames);
+    console.log('ModuleSelector - value:',value);
     // Get selected module(s)
     let selectedModules = value;
     // Module selection handler

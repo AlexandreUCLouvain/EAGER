@@ -79,42 +79,54 @@ class Testing {
         data: []
       };
 
-      // Test modules
-      for (let j = 0; j < this.recognizers.modules.length; j++) {
-        let recognizerModule = this.recognizers.modules[j];
-        // Callback to display the progress of the testing to the user
-        let printProgress = (recognizerProgress) => {
-          // let I = this.datasetsProcedures.length;
-          let J = this.recognizers.modules.length
-          // let progress = 100 * (i/I + j/(I*J) + recognizerProgress/(I*J));
-          let progress = 100 * (j/J + recognizerProgress/(J));
-          let t1 = performance.now();
-          let elapsedTime = t1 - t0;
-          let remainingTime =  (elapsedTime / progress) * (100 - progress);
-          process.stdout.write(`Progress - ${progress.toFixed(1)}% (${getTimeStr(remainingTime)} remaining)                      \r`);
+            // Check if Majority Voting is applied and applies the difference if it's the case
+            let majorityVotingConfig = null;
+            let recognizersToProcess = [];
+
+            if (this.recognizers.modules.length === 1 && this.recognizers.modules[0].module.name === "MajorityVoting") {
+                majorityVotingConfig = this.recognizers.modules[0];
+                recognizersToProcess.push(majorityVotingConfig);
+            } else {
+                recognizersToProcess = this.recognizers.modules;
+            }
+
+            let recogniserModuleLenght = recognizersToProcess.length;
+
+            for (let j = 0; j < recogniserModuleLenght; j++) {
+                let recognizerModule = recognizersToProcess[j];
+                
+                let printProgress = (recognizerProgress) => {
+                    let J = recogniserModuleLenght
+                    let progress = 100 * (j/J + recognizerProgress/(J));
+                    let t1 = performance.now();
+                    let elapsedTime = t1 - t0;
+                    let remainingTime = (elapsedTime / progress) * (100 - progress);
+                    process.stdout.write(`Progress - ${progress.toFixed(1)}% (${getTimeStr(remainingTime)} remaining) \r`);
+                }
+                
+                let res = this.testRecognizer(procedure.paramName, datasets, recognizerModule, printProgress);
+                
+                datasetResults.data.push({
+                    name: recognizerModule.module.name,
+                    options: majorityVotingConfig ? majorityVotingConfig.moduleSettings : recognizerModule.moduleSettings,
+                    data: res
+                });
+            }
+            
+            results.push(datasetResults);
+            LogHelper.log('info', `Ending Testing (${this.testingType}, ${procedure})`);
+            writeFile(`results-${this.recognizerType}-${this.testingType}.json`, stringify(results, {maxLength: 150, indend: 2}));
         }
-        let res = this.testRecognizer(procedure.paramName, datasets, recognizerModule, printProgress);
-        datasetResults.data.push({
-          name: recognizerModule.module.name,
-          options: recognizerModule.moduleSettings,
-          data: res
-        });
-      }
-      results.push(datasetResults);
-      LogHelper.log('info', `Ending Testing (${this.testingType}, ${procedure})`);
-      writeFile(`results-${this.recognizerType}-${this.testingType}.json`, stringify(results, {maxLength: 150, indend: 2}));
     }
-  }
 
-  testRecognizer(procedureType, datasets, recognizerModule, printProgress) {
-    throw new Error('You have to implement this function');
-  }
+    testRecognizer(procedureType, datasets, recognizerModule, printProgress) {
+        throw new Error('You have to implement this function');
+    }
 
-  getRepetitions(procedureType, datasets) {
-    throw new Error('You have to implement this function');
-  }
+    getRepetitions(procedureType, datasets) {
+        throw new Error('You have to implement this function');
+    }
 }
-
 
 // HELPER FUNCTIONS
 
@@ -169,7 +181,7 @@ function loadDataset(type, datasetLoaderModule, aggregateClasses = []) {
         if (oldClass === undefined) {
           LogHelper.log('warn', `The dataset '${datasetName}' does not feature class '${className}'.`);
         } else {
-          templates = templates.concat(templates, oldClass.getSamples());
+          templates = templates.concat(oldClass.getSamples());
         }
       }
       // Add the templates to the new gesture class

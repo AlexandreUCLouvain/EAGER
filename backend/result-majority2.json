@@ -1,0 +1,133 @@
+[
+  {
+    "r": 100,
+    "evaluationTechnique": "TTS",
+    "datasetProcedure": "singleDataset",
+    "userScenario": "UD",
+    "datasets": ["guinevere_unified"],
+    "gestures": [
+      "C_swipe_down",
+      "C_swipe_up",
+      "open_hand_down",
+      "open_hand_left",
+      "open_hand_right",
+      "open_hand_up",
+      "pinch_in",
+      "pinch_out",
+      "swipe_down",
+      "swipe_left",
+      "swipe_right",
+      "swipe_up",
+      "tap",
+      "thumbs_down",
+      "thumbs_up",
+      "turn_clockwise",
+      "turn_counter_clockwise"
+    ],
+    "data": [
+      {
+        "name": "MajorityVoting",
+        "options": {
+          "recognizers": [
+            {
+              "moduleSettings": {
+                "samplingPoints": 16,
+                "points": {
+                  "default": [
+                    "rightPalmPosition",
+                    "rightThumbTipPosition",
+                    "rightMiddleTipPosition",
+                    "rightIndexTipPosition",
+                    "rightPinkyTipPosition"
+                  ]
+                }
+              },
+              "additionalSettings": {"trainingGestures": []}
+            },
+            {
+              "moduleSettings": {
+                "samplingPoints": 16,
+                "points": {
+                  "default": [
+                    "rightPalmPosition",
+                    "rightThumbTipPosition",
+                    "rightMiddleTipPosition",
+                    "rightIndexTipPosition",
+                    "rightPinkyTipPosition"
+                  ]
+                }
+              },
+              "additionalSettings": {"trainingGestures": []}
+            },
+            {
+              "moduleSettings": {
+                "samplingPoints": 16,
+                "points": {
+                  "default": [
+                    "rightPalmPosition",
+                    "rightThumbTipPosition",
+                    "rightMiddleTipPosition",
+                    "rightIndexTipPosition",
+                    "rightPinkyTipPosition"
+                  ]
+                }
+              },
+              "additionalSettings": {"trainingGestures": []}
+            }
+          ],
+          "modules": []
+        },
+        "data": [
+          {
+            "n": 1,
+            "accuracy": 0.7994117647058824,
+            "time": 1.7054360588229867,
+            "confusionMatrix": [
+              [75, 6, 2, 0, 0, 1, 0, 0, 9, 0, 0, 4, 1, 0, 2, 0, 0],
+              [2, 89, 0, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 0, 0, 0],
+              [1, 4, 86, 0, 0, 8, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 93, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 14, 85, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+              [1, 1, 12, 0, 0, 81, 0, 2, 0, 0, 0, 3, 0, 0, 0, 0, 0],
+              [0, 0, 1, 0, 0, 0, 88, 5, 0, 0, 0, 0, 5, 0, 1, 0, 0],
+              [1, 4, 3, 0, 0, 1, 10, 71, 0, 0, 0, 4, 3, 0, 0, 2, 1],
+              [25, 4, 3, 0, 0, 1, 0, 0, 58, 0, 0, 9, 0, 0, 0, 0, 0],
+              [0, 0, 0, 4, 2, 0, 0, 0, 0, 73, 21, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 9, 17, 0, 0, 0, 0, 24, 50, 0, 0, 0, 0, 0, 0],
+              [9, 17, 2, 0, 0, 1, 0, 1, 12, 0, 0, 55, 0, 0, 3, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 99, 0, 1, 0, 0],
+              [0, 0, 0, 0, 1, 0, 2, 0, 2, 0, 0, 1, 0, 91, 3, 0, 0],
+              [1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 2, 1, 0, 94, 0, 0],
+              [1, 0, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 3, 88, 5],
+              [0, 0, 0, 2, 2, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 10, 83]
+            ]
+          },
+          {
+            "n": 2,
+            "accuracy": 0.8629411764705882,
+            "time": 1.4533262352940288,
+            "confusionMatrix": [
+              [85, 2, 1, 1, 1, 0, 3, 0, 4, 0, 0, 2, 0, 0, 1, 0, 0],
+              [0, 94, 0, 0, 0, 0, 0, 1, 0, 0, 0, 5, 0, 0, 0, 0, 0],
+              [2, 1, 95, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0],
+              [0, 0, 0, 98, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 1, 98, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+              [2, 3, 10, 0, 0, 79, 0, 0, 0, 0, 0, 5, 0, 0, 1, 0, 0],
+              [0, 0, 0, 0, 0, 0, 91, 7, 0, 0, 0, 0, 2, 0, 0, 0, 0],
+              [1, 2, 1, 0, 0, 1, 7, 79, 0, 0, 0, 4, 5, 0, 0, 0, 0],
+              [16, 4, 1, 0, 0, 0, 0, 0, 74, 0, 0, 5, 0, 0, 0, 0, 0],
+              [1, 0, 0, 3, 2, 0, 0, 0, 1, 74, 16, 0, 0, 3, 0, 0, 0],
+              [0, 0, 0, 3, 11, 0, 0, 0, 0, 27, 59, 0, 0, 0, 0, 0, 0],
+              [5, 18, 1, 0, 0, 2, 0, 0, 11, 0, 0, 62, 0, 0, 1, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0],
+              [0, 0, 0, 0, 3, 0, 0, 0, 0, 1, 0, 0, 0, 94, 2, 0, 0],
+              [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 98, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 98, 1],
+              [0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 9, 89]
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

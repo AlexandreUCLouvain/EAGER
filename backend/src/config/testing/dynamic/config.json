@@ -6,17 +6,91 @@
           "debug": false
         },
         "testingParams": {
-          "types": []
+          "types": [
+            {
+              "uuid": "ab920822-1989-4676-835f-303ca6a82cab",
+              "paramName": "tts",
+              "paramSettings": {
+                "r": 100,
+                "minT": 1,
+                "maxT": 11,
+                "modes": [
+                  {
+                    "uuid": "22743fc4-18ad-4524-807a-1279f28c8092",
+                    "paramName": "userIndependent",
+                    "paramSettings": {},
+                    "additionalSettings": {}
+                  }
+                ]
+              },
+              "additionalSettings": {}
+            }
+          ]
         }
       },
       "datasets": {
         "dynamic": {
-          "procedure": []
+          "procedure": [
+            {
+              "uuid": "1c098daa-72f7-42b9-a68e-e46c610125b0",
+              "paramName": "singleDataset",
+              "paramSettings": {
+                "modules": [
+                  {
+                    "uuid": "3842a913-6b19-428a-aab2-793673e445b6",
+                    "moduleName": "SHREC19-loader",
+                    "moduleType": "datasets/dynamic",
+                    "moduleSettings": {},
+                    "additionalSettings": {
+                      "datasets": [
+                        "SHREC2019"
+                      ],
+                      "users": "",
+                      "datasetId": ""
+                    }
+                  }
+                ],
+                "aggregateClasses": []
+              },
+              "additionalSettings": {}
+            }
+          ]
         }
       },
       "recognizers": {
         "dynamic": {
-          "modules": []
+          "modules": [
+            {
+              "uuid": "d42e3963-5833-4dd7-820b-362e5ff274b1",
+              "moduleName": "uF",
+              "moduleType": "recognizers/dynamic",
+              "moduleSettings": {
+                "samplingPoints": 8,
+                "weights": {
+                  "alpha": 1,
+                  "beta": 4,
+                  "gamma": 0,
+                  "delta": 0
+                },
+                "articulations": {
+                  "unipath": [
+                    {
+                      "paths": {
+                        "default": [
+                          "Thumb_1"
+                        ]
+                      },
+                      "uuid": "625eaf7c-11b9-4104-8472-10b0ebf58d58"
+                    }
+                  ],
+                  "multipath": []
+                }
+              },
+              "additionalSettings": {
+                "useCustomParams": false
+              }
+            }
+          ]
         }
       }
     }

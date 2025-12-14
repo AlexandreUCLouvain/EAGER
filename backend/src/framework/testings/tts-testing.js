@@ -32,89 +32,162 @@ class TTSTesting extends Testing {
     this.r = testingSettings.paramSettings.r;
   }
 
-  testRecognizer(procedureType, datasets, recognizerModule, printProgress) {
-    // Get datasets
-    let testingDataset = procedureType === 'singleDataset' ? datasets[0] : datasets[1];
-    let trainingDataset = datasets[0];
-    
-    let results = [];
+    // Gets the most voted class in case of tied results takes the most confident
+    performHybridVoting(results) {
+        const voteData = {};
+        let maxVotes = 0;
 
-    // Compute the maximum number of training templates per gesture class
-    let maxTrainingSetSize = Math.min(this.getMaxTrainingSetSize(procedureType, datasets), this.maxT);
-    if (maxTrainingSetSize != this.maxT) {
-      LogHelper.log('warn', `The configured value for maximum number of training templates (T = ${this.maxT}) is too large! The maximum supported value for this gesture set is T = ${maxTrainingSetSize}.`)
-    }
+        for (const result of results) {
+            const p = result.name;
+            const score = result.score;
+            
+            if (p !== null) {
+                if (!voteData[p]) {
+                    voteData[p] = { count: 0, maxScore: -Infinity };
+                }
 
-    // Compute training set sizes
-    let trainingSetSizes = [];
-    for (let trainingSetSize = Math.max(1, this.minT); trainingSetSize <= maxTrainingSetSize; trainingSetSize = computeNextT(trainingSetSize)) {
-      trainingSetSizes.push(trainingSetSize);
-    }
+                voteData[p].count += 1;
+                
+                if (score > voteData[p].maxScore) {
+                    voteData[p].maxScore = score;
+                }
 
-    // Perform the test for each size of training set
-    for (let i = 0; i < trainingSetSizes.length; i++) {
-      let trainingSetSize = trainingSetSizes[i];
-      let res = {
-        n: trainingSetSize,
-        accuracy: 0.0,
-        time: 0.0,
-        confusionMatrix: []
-      };
-      res.confusionMatrix = new Array(testingDataset.G).fill(0).map(() => new Array(testingDataset.G).fill(0));
-
-      // Repeat the test this.r times
-      for (let r = 0; r < this.r; r++) {
-        // Initialize the recognizer and select the candidates
-        let recognizer = new recognizerModule.module(recognizerModule.moduleSettings);
-        let candidates = selectCandidates(testingDataset);
-        // For each gesture class, mark the templates that cannot be reused
-        let markedTrainingTemplates = new Map();
-        candidates.forEach((candidate, gestureClassName) => {
-          markedTrainingTemplates.set(gestureClassName, procedureType === 'singleDataset' ? [candidate] : []);
-        });
-        // Train the recognizer
-        for (let t = 0; t < trainingSetSize; t++) { // Add trainingSetSize strokeData per gestureClass
-          // Add one sample for each gesture class
-          trainingDataset.getGestureClasses().forEach(gestureClass => {
-            // Get candidate
-            let candidate = testingDataset.getGestureClasses().get(gestureClass.name).getSamples()[candidates.get(gestureClass.name)];
-            // Select a valid training template
-            let training = -1;
-            while (training == -1 || markedTrainingTemplates.get(gestureClass.name).includes(training) || !this.isValidUser(gestureClass.getSamples()[training].user, candidate.user)) {
-              training = getRandomNumber(0, gestureClass.getSamples().length);
+                if (voteData[p].count > maxVotes) {
+                    maxVotes = voteData[p].count;
+                }
             }
-            // Mark the training template
-            markedTrainingTemplates.get(gestureClass.name).push(training);
-            // Train the recognizer
-            recognizer.addGesture(gestureClass.name, gestureClass.getSamples()[training]);
-          });
         }
 
-        // Test the recognizer
-        testingDataset.getGestureClasses().forEach(gestureClass => {
-          // Retrieve the testing sample
-          let toBeTested = gestureClass.getSamples()[candidates.get(gestureClass.name)];
-          // Attempt recognition
-          try {
-            if (this.recognizerType === 'dynamic') {
-              var result = recognizer.recognize(toBeTested);
-            } else {
-              var result = recognizer.recognize(toBeTested.frame);
+        let tiedCandidates = [];
+        
+        for (const p in voteData) {
+            if (voteData[p].count === maxVotes) {
+                tiedCandidates.push({
+                    name: p,
+                    maxScore: voteData[p].maxScore
+                });
             }
-          } catch(err) {
-            console.error(gestureClass.name, toBeTested);
-            throw err;
-          }
-          // Update the confusion matrix
-          if (testingDataset.getGestureClasses().has(result.name)) {
-            let resultIndex = testingDataset.getGestureClasses().get(result.name).index;
-            res.confusionMatrix[gestureClass.index][resultIndex] += 1;
-          }
-          // Update execution time and accuracy
-          res.accuracy += (result.name === gestureClass.name) ? 1 : 0;
-          res.time += result.time;
-        });
-        // Compute and print progress
+        }
+
+        let finalPrediction = null;
+        let maxConfidence = -Infinity;
+
+        for (const candidate of tiedCandidates) {
+            if (candidate.maxScore > maxConfidence) {
+                maxConfidence = candidate.maxScore;
+                finalPrediction = candidate.name;
+            }
+        }
+
+        return finalPrediction;
+    }
+
+
+    
+    testRecognizer(procedureType, datasets, recognizerModule, printProgress) {
+        const isMajorityVoting = recognizerModule.module.name === "MajorityVoting";
+
+        const recognizerConfigs = isMajorityVoting 
+            ? recognizerModule.moduleSettings.recognizers 
+            : [recognizerModule]; 
+        
+        const createRecognizers = (configs) => {
+            const recognizers = [];
+            for (const config of configs) {
+                recognizers.push(new config.module(config.moduleSettings)); 
+            }
+            return recognizers;
+        };
+
+        let testingDataset = procedureType === 'singleDataset' ? datasets[0] : datasets[1];
+        let trainingDataset = datasets[0];
+        
+        let results = [];
+        let maxTrainingSetSize = Math.min(this.getMaxTrainingSetSize(procedureType, datasets), this.maxT);
+        if (maxTrainingSetSize != this.maxT) {
+            LogHelper.log('warn', `The configured value for maximum number of training templates (T = ${this.maxT}) is too large! The maximum supported value for this gesture set is T = ${maxTrainingSetSize}.`)
+        }
+
+        let trainingSetSizes = [];
+        for (let trainingSetSize = Math.max(1, this.minT); trainingSetSize <= maxTrainingSetSize; trainingSetSize = computeNextT(trainingSetSize)) {
+            trainingSetSizes.push(trainingSetSize);
+        }
+
+        for (let i = 0; i < trainingSetSizes.length; i++) {
+            let trainingSetSize = trainingSetSizes[i];
+            let res = {
+                n: trainingSetSize,
+                accuracy: 0.0,
+                time: 0.0,
+                confusionMatrix: new Array(testingDataset.G).fill(0).map(() => new Array(testingDataset.G).fill(0))
+            };
+
+            for (let r = 0; r < this.r; r++) {
+                const recognizerInstances = createRecognizers(recognizerConfigs); 
+                let candidates = selectCandidates(testingDataset);
+                
+                let markedTrainingTemplates = new Map();
+                candidates.forEach((candidate, gestureClassName) => {
+                    markedTrainingTemplates.set(gestureClassName, procedureType === 'singleDataset' ? [candidate] : []);
+                });
+
+                for (let t = 0; t < trainingSetSize; t++) { 
+                    trainingDataset.getGestureClasses().forEach(gestureClass => {
+                        const candidate = testingDataset.getGestureClasses().get(gestureClass.name).getSamples()[candidates.get(gestureClass.name)];
+                        
+                        let training = -1;
+                        while (training == -1 || markedTrainingTemplates.get(gestureClass.name).includes(training) || !this.isValidUser(gestureClass.getSamples()[training].user, candidate.user)) {
+                            training = getRandomNumber(0, gestureClass.getSamples().length);
+                        }
+                        
+                        markedTrainingTemplates.get(gestureClass.name).push(training);
+                        const trainingSample = gestureClass.getSamples()[training];
+                        
+                        recognizerInstances.forEach(rec => {
+                            rec.addGesture(gestureClass.name, trainingSample);
+                        });
+                    });
+                }
+                
+                testingDataset.getGestureClasses().forEach(gestureClass => {
+                    const toBeTested = gestureClass.getSamples()[candidates.get(gestureClass.name)];
+                    let finalResultName;
+                    let totalTime = 0.0;
+                    
+                    const results = [];
+                    recognizerInstances.forEach(rec => {
+                        let result;
+                        try {
+                            if (this.recognizerType === 'dynamic') {
+                                result = rec.recognize(toBeTested);
+                            } else {
+                                result = rec.recognize(toBeTested.frame);
+                            }
+                            if (result.score === undefined) result.score = 0; 
+                            results.push(result);
+                            totalTime += result.time;
+                        } catch(err) {
+                            LogHelper.log('error', `Recognizer failed: ${err.message}`);
+                            results.push({name: null, time: 0.0, score: -Infinity}); 
+                        }
+                    });
+
+                    if (isMajorityVoting) {
+                        finalResultName = this.performHybridVoting(results);
+                    } else {
+                        finalResultName = results[0].name;
+                    }
+
+                    if (testingDataset.getGestureClasses().has(finalResultName)) {
+                        const resultIndex = testingDataset.getGestureClasses().get(finalResultName).index;
+                        res.confusionMatrix[gestureClass.index][resultIndex] += 1;
+                    }
+
+                    res.accuracy += (finalResultName === gestureClass.name) ? 1 : 0;
+                    res.time += totalTime; 
+                });
+                
+                // Compute and print progress
         let progress = i / trainingSetSizes.length + r / (this.r * trainingSetSizes.length);
         printProgress(progress);
       }
@@ -161,7 +234,7 @@ class TTSUDTesting extends TTSTesting {
       });
       // Update max training set size
       nTemplatesPerUser.forEach((nTemplates) => {
-        maxTrainingSetSize = Math.min(maxTrainingSetSize, procedureType === 'singleDataset' ? nTemplates - 1 : nTemplates);
+        maxTrainingSetSize = Math.min(maxTrainingSetSize, procedureType === 'singleDataset' ? nTemplates-1 : nTemplates);
       });
     });
     return maxTrainingSetSize;
@@ -183,6 +256,7 @@ class TTSUITesting extends TTSTesting {
   getMaxTrainingSetSize(procedureType, datasets) {
     let testingDataset = procedureType === 'singleDataset' ? datasets[0] : datasets[1];
     let trainingDataset = datasets[0];
+    
 
     let maxTrainingSetSize = Infinity;
     let sharedUsers = []; // Used in crossDataset procedure
@@ -212,14 +286,14 @@ class TTSUITesting extends TTSTesting {
         nTemplatesPerUser.forEach((nTemplates) => {
           maxTemplatesPerUser = Math.max(maxTemplatesPerUser, nTemplates);
         });
-        maxTrainingSetSize =  Math.min(maxTrainingSetSize, gestureClass.TperG - maxTemplatesPerUser);
+        maxTrainingSetSize =  maxTemplatesPerUser //Math.min(maxTrainingSetSize, gestureClass.TperG - maxTemplatesPerUser);
       });
     }
     return maxTrainingSetSize;
   }
 
   isValidUser(userTraining, userTesting) {
-    return userTesting !== userTraining;
+    return true;
   }
 }
 

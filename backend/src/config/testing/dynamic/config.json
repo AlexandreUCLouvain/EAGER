@@ -13,11 +13,11 @@
               "paramSettings": {
                 "r": 100,
                 "minT": 1,
-                "maxT": 3,
+                "maxT": 11,
                 "modes": [
                   {
-                    "uuid": "66ed9415-522a-499e-894c-24d8c5cf9e50",
-                    "paramName": "userDependent",
+                    "uuid": "22743fc4-18ad-4524-807a-1279f28c8092",
+                    "paramName": "userIndependent",
                     "paramSettings": {},
                     "additionalSettings": {}
                   }
@@ -37,13 +37,13 @@
               "paramSettings": {
                 "modules": [
                   {
-                    "uuid": "fb39b12c-a72f-4da2-8231-9154de8603ad",
-                    "moduleName": "unified-loader",
+                    "uuid": "3842a913-6b19-428a-aab2-793673e445b6",
+                    "moduleName": "SHREC19-loader",
                     "moduleType": "datasets/dynamic",
                     "moduleSettings": {},
                     "additionalSettings": {
                       "datasets": [
-                        "guinevere_unified"
+                        "SHREC2019"
                       ],
                       "users": "",
                       "datasetId": ""
@@ -61,73 +61,30 @@
         "dynamic": {
           "modules": [
             {
-              "uuid": "35773b97-2036-42e3-b69a-6b4f3f9170ad",
-              "moduleName": "majorityvoting",
+              "uuid": "d42e3963-5833-4dd7-820b-362e5ff274b1",
+              "moduleName": "uF",
               "moduleType": "recognizers/dynamic",
               "moduleSettings": {
-                "recognizers": [
-                  {
-                    "uuid": "03597255-e36b-4b37-961c-a57cff328f73",
-                    "moduleName": "p3dollar",
-                    "moduleType": "recognizers/dynamic",
-                    "moduleSettings": {
-                      "samplingPoints": 16,
-                      "points": {
+                "samplingPoints": 8,
+                "weights": {
+                  "alpha": 1,
+                  "beta": 4,
+                  "gamma": 0,
+                  "delta": 0
+                },
+                "articulations": {
+                  "unipath": [
+                    {
+                      "paths": {
                         "default": [
-                          "rightPalmPosition",
-                          "rightThumbTipPosition",
-                          "rightMiddleTipPosition",
-                          "rightIndexTipPosition",
-                          "rightPinkyTipPosition"
+                          "Thumb_1"
                         ]
-                      }
-                    },
-                    "additionalSettings": {
-                      "trainingGestures": []
+                      },
+                      "uuid": "625eaf7c-11b9-4104-8472-10b0ebf58d58"
                     }
-                  },
-                  {
-                    "uuid": "99dd47e2-e029-452c-9db0-6d649d970a61",
-                    "moduleName": "p3dollarplus",
-                    "moduleType": "recognizers/dynamic",
-                    "moduleSettings": {
-                      "samplingPoints": 16,
-                      "points": {
-                        "default": [
-                          "rightPalmPosition",
-                          "rightThumbTipPosition",
-                          "rightMiddleTipPosition",
-                          "rightIndexTipPosition",
-                          "rightPinkyTipPosition"
-                        ]
-                      }
-                    },
-                    "additionalSettings": {
-                      "trainingGestures": []
-                    }
-                  },
-                  {
-                    "uuid": "484aed0b-96d7-468e-9ece-2b2baf24cdc3",
-                    "moduleName": "q3dollar",
-                    "moduleType": "recognizers/dynamic",
-                    "moduleSettings": {
-                      "samplingPoints": 16,
-                      "points": {
-                        "default": [
-                          "rightPalmPosition",
-                          "rightThumbTipPosition",
-                          "rightMiddleTipPosition",
-                          "rightIndexTipPosition",
-                          "rightPinkyTipPosition"
-                        ]
-                      }
-                    },
-                    "additionalSettings": {
-                      "trainingGestures": []
-                    }
-                  }
-                ],
-                "modules": []
+                  ],
+                  "multipath": []
+                }
               },
               "additionalSettings": {
                 "useCustomParams": false

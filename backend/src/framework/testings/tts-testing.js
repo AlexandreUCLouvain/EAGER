@@ -103,7 +103,6 @@ class TTSTesting extends Testing {
         let trainingDataset = datasets[0];
         
         let results = [];
-
         let maxTrainingSetSize = Math.min(this.getMaxTrainingSetSize(procedureType, datasets), this.maxT);
         if (maxTrainingSetSize != this.maxT) {
             LogHelper.log('warn', `The configured value for maximum number of training templates (T = ${this.maxT}) is too large! The maximum supported value for this gesture set is T = ${maxTrainingSetSize}.`)
@@ -235,7 +234,7 @@ class TTSUDTesting extends TTSTesting {
       });
       // Update max training set size
       nTemplatesPerUser.forEach((nTemplates) => {
-        maxTrainingSetSize = Math.min(maxTrainingSetSize, procedureType === 'singleDataset' ? nTemplates - 1 : nTemplates);
+        maxTrainingSetSize = Math.min(maxTrainingSetSize, procedureType === 'singleDataset' ? nTemplates-1 : nTemplates);
       });
     });
     return maxTrainingSetSize;
@@ -257,6 +256,7 @@ class TTSUITesting extends TTSTesting {
   getMaxTrainingSetSize(procedureType, datasets) {
     let testingDataset = procedureType === 'singleDataset' ? datasets[0] : datasets[1];
     let trainingDataset = datasets[0];
+    
 
     let maxTrainingSetSize = Infinity;
     let sharedUsers = []; // Used in crossDataset procedure
@@ -286,14 +286,14 @@ class TTSUITesting extends TTSTesting {
         nTemplatesPerUser.forEach((nTemplates) => {
           maxTemplatesPerUser = Math.max(maxTemplatesPerUser, nTemplates);
         });
-        maxTrainingSetSize =  Math.min(maxTrainingSetSize, gestureClass.TperG - maxTemplatesPerUser);
+        maxTrainingSetSize =  maxTemplatesPerUser //Math.min(maxTrainingSetSize, gestureClass.TperG - maxTemplatesPerUser);
       });
     }
     return maxTrainingSetSize;
   }
 
   isValidUser(userTraining, userTesting) {
-    return userTesting !== userTraining;
+    return true;
   }
 }
 

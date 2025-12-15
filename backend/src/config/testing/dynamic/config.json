@@ -8,15 +8,15 @@
         "testingParams": {
           "types": [
             {
-              "uuid": "ab920822-1989-4676-835f-303ca6a82cab",
+              "uuid": "7587e655-da9f-49b0-bbb7-ebd28216aec8",
               "paramName": "tts",
               "paramSettings": {
                 "r": 100,
                 "minT": 1,
-                "maxT": 11,
+                "maxT": 4,
                 "modes": [
                   {
-                    "uuid": "22743fc4-18ad-4524-807a-1279f28c8092",
+                    "uuid": "07be4ff4-3d4b-4e83-a757-58d3ca8dcec4",
                     "paramName": "userIndependent",
                     "paramSettings": {},
                     "additionalSettings": {}
@@ -32,12 +32,12 @@
         "dynamic": {
           "procedure": [
             {
-              "uuid": "1c098daa-72f7-42b9-a68e-e46c610125b0",
+              "uuid": "44fca9f5-437f-4e6a-a520-72a54f385f8c",
               "paramName": "singleDataset",
               "paramSettings": {
                 "modules": [
                   {
-                    "uuid": "3842a913-6b19-428a-aab2-793673e445b6",
+                    "uuid": "60aed49a-286d-4377-887b-0245df920f6d",
                     "moduleName": "SHREC19-loader",
                     "moduleType": "datasets/dynamic",
                     "moduleSettings": {},
@@ -61,29 +61,177 @@
         "dynamic": {
           "modules": [
             {
-              "uuid": "d42e3963-5833-4dd7-820b-362e5ff274b1",
-              "moduleName": "uF",
+              "uuid": "018296e8-7f39-4cbb-abeb-cf4af6d2b8e9",
+              "moduleName": "dirichlet_weighted",
               "moduleType": "recognizers/dynamic",
               "moduleSettings": {
-                "samplingPoints": 8,
-                "weights": {
-                  "alpha": 1,
-                  "beta": 4,
-                  "gamma": 0,
-                  "delta": 0
-                },
-                "articulations": {
-                  "unipath": [
-                    {
-                      "paths": {
+                "recognizers": [
+                  {
+                    "uuid": "e3c1cca6-9096-416b-aad0-dfad0f810954",
+                    "moduleName": "threecent",
+                    "moduleType": "recognizers/dynamic",
+                    "moduleSettings": {
+                      "samplingPoints": 16,
+                      "points": {
                         "default": [
-                          "Thumb_1"
+                          "Palm"
                         ]
-                      },
-                      "uuid": "625eaf7c-11b9-4104-8472-10b0ebf58d58"
+                      }
+                    },
+                    "additionalSettings": {
+                      "trainingGestures": [],
+                      "weight": 0.84
                     }
-                  ],
-                  "multipath": []
+                  },
+                  {
+                    "uuid": "5ca8e760-7ea7-4cd6-96df-741b16e23ecd",
+                    "moduleName": "q3dollar",
+                    "moduleType": "recognizers/dynamic",
+                    "moduleSettings": {
+                      "samplingPoints": 16,
+                      "points": {
+                        "default": [
+                          "Palm"
+                        ]
+                      }
+                    },
+                    "additionalSettings": {
+                      "trainingGestures": [],
+                      "Weight": 0.4,
+                      "weight": 0.87
+                    }
+                  },
+                  {
+                    "uuid": "a71d67a8-9da9-4c17-8c15-670c86d6b00a",
+                    "moduleName": "p3dollarplus",
+                    "moduleType": "recognizers/dynamic",
+                    "moduleSettings": {
+                      "samplingPoints": 16,
+                      "points": {
+                        "default": [
+                          "Palm"
+                        ]
+                      }
+                    },
+                    "additionalSettings": {
+                      "trainingGestures": [],
+                      "weight": 0.94
+                    }
+                  },
+                  {
+                    "uuid": "5ac912be-f3aa-4f29-83ac-d74ce9827c6d",
+                    "moduleName": "jackknife",
+                    "moduleType": "recognizers/dynamic",
+                    "moduleSettings": {
+                      "samplingPoints": 16,
+                      "points": {
+                        "default": [
+                          "Palm"
+                        ]
+                      }
+                    },
+                    "additionalSettings": {
+                      "trainingGestures": [],
+                      "weight": 0.92
+                    }
+                  },
+                  {
+                    "uuid": "6f3df15c-4466-4c1c-be27-30a29c68407f",
+                    "moduleName": "pdollarplus",
+                    "moduleType": "recognizers/dynamic",
+                    "moduleSettings": {
+                      "samplingPoints": 16,
+                      "points": {
+                        "default": [
+                          "Palm"
+                        ]
+                      }
+                    },
+                    "additionalSettings": {
+                      "trainingGestures": [],
+                      "weight": 0.97
+                    }
+                  }
+                ]
+              },
+              "additionalSettings": {
+                "useCustomParams": false
+              }
+            },
+            {
+              "uuid": "a5fd8fe1-efe1-4b49-a508-e08bc03f6332",
+              "moduleName": "p3dollarplus",
+              "moduleType": "recognizers/dynamic",
+              "moduleSettings": {
+                "samplingPoints": 16,
+                "points": {
+                  "default": [
+                    "Palm"
+                  ]
+                }
+              },
+              "additionalSettings": {
+                "useCustomParams": false
+              }
+            },
+            {
+              "uuid": "939d2b2a-bb9f-457d-8e39-e28d1d1979ed",
+              "moduleName": "q3dollar",
+              "moduleType": "recognizers/dynamic",
+              "moduleSettings": {
+                "samplingPoints": 16,
+                "points": {
+                  "default": [
+                    "Palm"
+                  ]
+                }
+              },
+              "additionalSettings": {
+                "useCustomParams": false
+              }
+            },
+            {
+              "uuid": "4fb5ddca-f68b-466e-9b66-989f4e83db95",
+              "moduleName": "threecent",
+              "moduleType": "recognizers/dynamic",
+              "moduleSettings": {
+                "samplingPoints": 16,
+                "points": {
+                  "default": [
+                    "Palm"
+                  ]
+                }
+              },
+              "additionalSettings": {
+                "useCustomParams": false
+              }
+            },
+            {
+              "uuid": "7b3d2e35-bcb1-4006-9222-1d90315428af",
+              "moduleName": "jackknife",
+              "moduleType": "recognizers/dynamic",
+              "moduleSettings": {
+                "samplingPoints": 16,
+                "points": {
+                  "default": [
+                    "Palm"
+                  ]
+                }
+              },
+              "additionalSettings": {
+                "useCustomParams": false
+              }
+            },
+            {
+              "uuid": "d21d6b3e-b01f-4092-ad20-66129c7494d2",
+              "moduleName": "pdollarplus",
+              "moduleType": "recognizers/dynamic",
+              "moduleSettings": {
+                "samplingPoints": 16,
+                "points": {
+                  "default": [
+                    "Palm"
+                  ]
                 }
               },
               "additionalSettings": {

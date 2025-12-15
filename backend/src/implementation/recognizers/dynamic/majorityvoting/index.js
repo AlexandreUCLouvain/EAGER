@@ -40,37 +40,7 @@ class Recognizer extends AbstractDynamicRecognizer {
 		});
 	}
 
-	recognize(sample) {
-		let votes = {};
-		let voters = 0;
-		let t0 = performance.now();
-		this.recognizers.forEach((recognizer, index) => {
-			let result = recognizer.recognize(sample);
-			if (result.name) {
-				voters += 1;
-				if (result.hasOwnProperty(result.name)) {
-					votes[result.name] = 1;
-				}
-				else {
-					votes[result.name] += 1;
-				}
-			}
-		});
-		let bestResult ='';
-		let bestVotes = 0;
-		Object.keys(votes).forEach(label => {
-			if (votes[label] > bestVotes) {
-				bestVotes = votes[label];
-				bestResult = label;
-			}
-		});
-
-		let t1 = performance.now();
-		return {
-			name: bestResult ? bestFit : '',
-			score: (bestResult && votes > 0) ?  bestVotes / voters : 0.0,
-			time: t1 - t0
-		};
+	recognize(sample) {console.log("here"); return undefined;
 	}
 
 	toString() {

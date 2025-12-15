@@ -40,6 +40,14 @@ class Recognizer extends AbstractDynamicRecognizer {
 		return (result.Name === "No match.") ? { name: "", score: result.Score, time: result.Time } : { name: result.Name, score: result.Score, time: result.Time };
 	}
 
+  recognizeAllSimilarities(sample) {
+		let points = convert(sample, this.paths);
+		if (points.length === 0) {
+			return { name: "", score: 0.0, time: 0 };
+		}
+		return this.recognizer.RecognizeAllSimilarities(points);
+	}
+
   toString() {
     return `${Recognizer.name} [ samplingPoints = ${this.samplingPoints}, paths = ${this.paths} ]`;
   }

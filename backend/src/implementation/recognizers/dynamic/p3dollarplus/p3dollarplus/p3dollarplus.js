@@ -104,6 +104,9 @@ function P3DollarPlusRecognizer(numPoints) // constructor
 				bestClass = className;
 				bestScore = score;
 			}
+			else if (score === bestScore){
+				console.log("How many time is this the case??????");
+			}
 		}
 
 		const t1 = performance.now();
@@ -112,27 +115,23 @@ function P3DollarPlusRecognizer(numPoints) // constructor
 	this.RecognizeAllSimilarities = function (points) {
 		var t0 = performance.now();
 		var candidate = new PointCloud("", points);
-
 		const bestDistance = {};
-
 		for (var i = 0; i < this.PointClouds.length; i++) // for each point-cloud template
 		{
 			var d = Math.min(
-				CloudDistance(candidate.Points, this.PointClouds[i].Points, b),
-				CloudDistance(this.PointClouds[i].Points, candidate.Points, b)
+				CloudDistance(candidate.Points, this.PointClouds[i].Points, +Infinity),
+				CloudDistance(this.PointClouds[i].Points, candidate.Points, +Infinity)
 			); 
-			const className = this.pointCloud[i].Name;
+			const className = this.PointClouds[i].Name;
 			if(bestDistance[className] === undefined || d < bestDistance[className]){
 				bestDistance[className] = d;
 			}
 		}
-
 		const similarities = {};
 		for(const className in bestDistance){
 			const d = bestDistance[className];
 			similarities[className] = d > 1.0 ? 1.0/d : 1.0;
 		}
-
 		var t1 = performance.now();
 		return {similarities, time: t1-t0};
 	}

@@ -93,6 +93,34 @@ class Recognizer extends AbstractDynamicRecognizer {
     return (bestFitClass === "") ? { name: "", score: 0.0, time: t1 - t0 } : { name: bestFitClass, score: bestScore > 1.0 ? 1.0 : bestScore, time: t1 - t0 };
   }
 
+  recognizeAllSimilarities(sample) {
+    let t0 = performance.now();
+
+    let points = convert(sample);
+    points = normalizeP(points, NumPoints);
+
+    const bestDistance = {};
+
+    Object.keys(this.templates).forEach((name) => {
+      for (let i = 0; i < this.templates[name].length; i++) {
+        let tmpDist = gestureDistance(points, this.templates[name][i]);
+        if (bestDistance[name] === undefined || tmpDist < bestDistance[name]) {
+          bestDistance[name] = tmpDist;
+        }
+      }
+    });
+
+    const similarities = {};
+    for (const name in bestDistance) {
+      const d = bestDistance[name];
+      const score = 1 / d;
+      similarities[name] = score > 1.0 ? 1.0 : score;
+    }
+
+    let t1 = performance.now();
+    return { similarities, time: t1 - t0 };
+  }
+
   toString() {
     return `${Recognizer.name} [ samplingPoints = ${NumPoints}, pathName = ${pathName} ]`;
   }

@@ -122,21 +122,47 @@ function Q3DollarRecognizer(numPoints) // constructor
 	// The $Q3 Point-Cloud Recognizer API begins here -- 4 methods: Recognize(), AddGesture(), RemoveGesture(), DeleteUserGestures()
 	//
 	this.Recognize = function (points) {
-		var t0 = performance.now();
-		var candidate = new PointCloud("", points);
+		const t0 = performance.now();
+		const similarities = this.RecognizeAllSimilarities(points).similarities;
 
-		var u = -1;
-		var b = +Infinity;
-		for (var i = 0; i < this.PointClouds.length; i++) // for each point-cloud template
-		{
-			var d = CloudMatch(candidate, this.PointClouds[i], b);
-			if (d < b) {
-				b = d; // best (least) distance
-				u = i; // point-cloud index
+		let bestClass = "";
+		let bestScore = 0.0
+
+		for(const className in similarities){
+			const score = similarities[className];
+			if(score > bestScore){
+				bestClass = className;
+				bestScore = score;
 			}
 		}
+
+		const t1 = performance.now();
+		return bestClass === "" ? new Result("No match.", 0.0, t1-t0) : new Result(bestClass,bestScore,t1-t0);
+	}
+	this.RecognizeAllSimilarities = function (points) {
+		var t0 = performance.now();
+		var candidate = new PointCloud("", points);
+		const bestDistance = {};
+		
+		for (var i = 0; i < this.PointClouds.length; i++) // for each point-cloud template
+		{
+			var d = CloudMatch(candidate, this.PointClouds[i], +Infinity);
+
+			const className = this.PointClouds[i].Name;
+			if(bestDistance[className] === undefined || d < bestDistance[className]){
+				bestDistance[className] = d;
+			}
+		}
+		
+
+		const similarities = {};
+		for(const className in bestDistance){
+			const d = bestDistance[className];
+			similarities[className] = d > 1.0 ? 1.0/d : 1.0;
+		}
+
 		var t1 = performance.now();
-		return (u == -1) ? new Result("No match.", 0.0, t1 - t0) : new Result(this.PointClouds[u].Name, b > 1.0 ? 1.0 / b : 1.0, t1 - t0);
+		return {similarities, time: t1-t0};
 	}
 	this.AddGesture = function (name, points) {
 		this.PointClouds.push(new PointCloud(name, points));

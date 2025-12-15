@@ -55,6 +55,18 @@ class Recognizer extends AbstractDynamicRecognizer {
     return (ret.name == -1) ? { name: "", score: 0.0, time: t1 - t0 } : { name: ret.name, score: ret.score, time: t1 - t0 };
   }
 
+  recognizeAllSimilarities(sample) {
+    let jackknifeSample = convert(sample, this.selectedPoints);
+    if (!jackknifeSample) {
+      return { name: "", score: 0.0, time: 0.0 };
+    }
+    let t0 = performance.now();
+    let similarities = this.jackknifeRecognizer.classifyAllSimilarities(jackknifeSample);
+    let t1 = performance.now();
+    
+    return {similarities, time: t1-t0};
+  }
+
   toString() {
     return `${Recognizer.name} [ samplingPoints = ${this.N} ]`;
   }

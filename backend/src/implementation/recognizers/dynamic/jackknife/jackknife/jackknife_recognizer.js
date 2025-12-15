@@ -139,6 +139,86 @@ Jackknife.prototype.classify = function(trajectory) {
     return { name: ret, score: bestScore > 1.0 ? 1.0 : bestScore };
 }
 
+/**
+ * Returns an n-best list, but
+ * because of early rejection, such a list may not make sense.
+ *
+ */
+Jackknife.prototype.classifyAllSimilarities = function(trajectory) {
+
+	if (trajectory instanceof Sample) {
+		return this.classifyAllSimilarities(trajectory.trajectory);
+	}
+
+	var features = new JackknifeFeatures(this.blades, trajectory);
+	var template_cnt = this.templates.length;
+
+	for (var tt = 0; tt < template_cnt; tt++) {
+		var cf = 1.0;
+
+		if (this.blades.cf_abs_distance > 0) {
+			cf *= 1.0 / Math.max(
+				0.01,
+				features.abs.dot(this.templates[tt].features.abs));
+		}
+
+		if (this.blades.cf_bb_widths > 0) {
+			cf *= 1.0 / Math.max(
+				0.01,
+				features.bb.dot(this.templates[tt].features.bb));
+		}
+
+		this.templates[tt].cf = cf;
+
+		if (this.blades.lower_bound > 0) {
+			this.templates[tt].lb = cf * this.lower_bound(
+				features.vecs,
+				this.templates[tt]);
+		}
+	}
+
+	this.templates.sort(compareTemplates);
+
+	var best = Number.POSITIVE_INFINITY;
+	var bestPerClass = {};
+
+	for (var tt = 0; tt < template_cnt; tt++) {
+
+		if (this.templates[tt].lb > this.templates[tt].rejection_threshold)
+			continue;
+
+		if (this.templates[tt].lb > best)
+			continue;
+
+		var score = this.templates[tt].cf;
+
+		score *= this.DTW(
+			features.vecs,
+			this.templates[tt].features.vecs);
+
+		if (score > this.templates[tt].rejection_threshold)
+			continue;
+
+		var className = this.templates[tt].gesture_id;
+
+		if (bestPerClass[className] === undefined || score < bestPerClass[className]) {
+			bestPerClass[className] = score;
+		}
+
+		if (score < best) {
+			best = score;
+		}
+	}
+
+	var similarities = {};
+	for (var name in bestPerClass) {
+		var s = 1 / bestPerClass[name];
+		similarities[name] = s > 1.0 ? 1.0 : s;
+	}
+
+	return similarities;
+};
+
 
 /**
  * Learn a rejection threshold for each template.

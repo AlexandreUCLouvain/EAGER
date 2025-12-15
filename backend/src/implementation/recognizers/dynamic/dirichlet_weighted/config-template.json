@@ -1,0 +1,39 @@
+{
+  "label": "Dirichlet Weighted",
+  "name": "dirichlet_weighted",
+  "type": "recognizer-dynamic",
+  "description": "A module that uses weighted ensemble learning following dirichlet's distribution.",
+  "properties": {},
+  "settings": [
+    {
+      "name": "recognizers",
+      "type": "ModuleSelector",
+      "label": "Recognizers",
+      "description": "The recognizers to combine.",
+      "moduleType": "recognizers/dynamic",
+      "minModules": 1,
+      "maxModules": null,
+      "settings": [
+        {
+          "type": "GesturesSelector2",
+          "label": "Training gestures",
+          "name": "trainingGestures",
+          "description": "The gestures used for training the recognizer. If no gesture is selected, all gestures are used for training.",
+          "datasetType": "dynamic",
+          "default": []
+        },
+        {
+          "type": "FloatInput",
+          "required": true,
+          "label": "Weight",
+          "name": "weight",
+          "description": "The weights of the recognizer",
+          "minValue": 0.0,
+          "maxValue": 1.0,
+          "default": 1.0
+        }
+      ],
+      "default": []
+    }
+  ]
+}
